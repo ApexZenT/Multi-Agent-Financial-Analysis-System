@@ -1,61 +1,78 @@
 # Multi-Agent Financial Analysis System
 
-A modular **AI-powered multi-agent system** designed to perform intelligent financial analysis by coordinating multiple specialised agents. The system enables structured reasoning, scalability, and efficient financial insight generation by decomposing complex tasks into agent-driven workflows.
-
----
+A modular, extensible multi-agent framework for advanced financial intelligence. The system ingests heterogeneous market data, performs structured analysis through coordinated AI agents, and generates comprehensive and actionable insights.
 
 ## Key Features
 
-- **Multi-Agent Architecture**
-  - Multiple autonomous agents collaborate to perform data analysis, reasoning, and insight synthesis.
-  - Each agent handles a specific responsibility, improving clarity and extensibility.
+### Multi-Agent Architecture
+The system implements a hierarchical workflow with **eight specialised agents** to promote transparent, reproducible reasoning:
 
-- **Model Flexibility**
-  - Currently utilises **GPT4All** due to local memory constraints.
-  - The architecture is **model-agnostic** and allows easy replacement with other LLMs (OpenAI, HuggingFace, or custom models) based on available resources.
+- **Base Agent** — System bootstrap and entry point
+- **Coordinator** — Orchestrates workflow and agent sequencing
+- **Senior Researcher** — Performs deep contextual research using macroeconomic data and news
+- **Analyst** — Conducts quantitative analysis and data processing
+- **Decision Maker** — Synthesises research and analytical outputs into recommendations
+- **Evaluator** — Validates logical consistency, coherence, and confidence scoring
+- **Optimiser** — Refines reasoning chains for efficiency and accuracy
+- **Writer** — Produces structured, human-readable reports
 
-- **Modular & Scalable Design**
-  - Agents can be added, removed, or modified independently.
-  - Suitable for experimentation, research, and real-world financial workflows.
+Workflow: Coordination → Parallel Research & Analysis → Decision Synthesis → Evaluation → Optimization (conditional) → Report Generation
 
-- **Financial Data Analysis**
-  - Supports structured datasets (CSV, tabular data).
-  - Designed for trend analysis, forecasting, and financial decision support.
+### Data Sources & Processing
+- **News Sources**: CNBC, Reuters, The Guardian (via NewsAPI integration)
+- **Structured Data**: CSV datasets, macroeconomic time series (FRED), equity data (yfinance)
+- **High-Performance Processing**: **Polars** for superior speed and memory efficiency over Pandas
+- **Storage**:
+  - `financial_data.db` — Cleaned financial and news data
+  - `agent_memory.db` — Persistent agent context and intermediate reasoning
 
-- **Improved Interpretability**
-  - Distributed reasoning across agents enhances transparency compared to monolithic models.
+### Integrated Tools
+- **Economic Tool** — Time-series macroeconomic data from Federal Reserve Economic Data (FRED)
+- **News Tool** — Fetching, storage, and retrieval of financial news via NewsAPI (recent, historical, and database queries)
+- **Stock Tool** — Equity prices and metadata via yfinance
 
-- **Developer-Friendly**
-  - Clean project structure with reusable components.
-  - Easy integration with new data sources or analytical pipelines.
+### Technical Architecture
+Built for maintainability, scalability, and extensibility using established design patterns:
 
----
+- **SQLAlchemy ORM** — Full object-relational mapping with defined models
+- **DTOs** (Data Transfer Objects) — Type-safe data exchange between components
+- **DAOs** (Data Access Objects) — Abstracted database operations
+- **Adapters** — Source-specific normalisation (CSV, news APIs)
+- **Services** — Encapsulated business logic (e.g., NewsService)
+- **Model-Agnostic Design** — Default local inference with **GPT4All** (low resource usage); easily configurable for OpenAI, Anthropic, Grok, or other providers
+- **Tool Integration** — Agents equipped with a function calling for real-time data retrieval
 
-## Use Cases
+### Flow Chart
 
-- Financial trend analysis  
-- Risk assessment workflows  
-- AI-assisted financial research  
-- Multi-agent experimentation and learning  
+<img width="1548" height="870" alt="image" src="https://github.com/user-attachments/assets/d0df02f5-1fe0-490c-94cc-3534f43086c8" />
 
----
+### Extensibility
+Designed for seamless extension:
 
-## ⚙️ Tech Stack
+#### Adding New Agents
+- Inherit from base agent interface in `agents/`
+- Define role-specific prompts and tools
+- Register in the Coordinator workflow
 
-- Python  
-- GPT4All (current LLM backend)  
-- Multi-Agent AI concepts  
-- Data analysis libraries (as applicable)
+#### New Data Sources
+- Normalise to standardised DTOs
+- Register in the appropriate service
 
----
+#### New Tools
+- Add standalone functions/classes in `tools/`
+- Register and assign to relevant agents
 
-## Note
+#### LLM Flexibility
+- Switch providers via configuration only
+- Supports streaming, function calling, and per-agent parameters
 
-This project is intended for **learning, experimentation, and portfolio demonstration** purposes.  
-The system is designed to be **extensible**, allowing developers to switch LLMs or scale compute resources as needed.
+#### Database Scaling
+- ORM models are easily extensible
+- Agent memory persistence supports migration to PostgreSQL, vector stores, etc.
 
----
+## License
+MIT License — free to use, modify, and distribute.
 
-## 📄 License
+**Note**: This system is intended for research, analysis, and experimentation. Outputs are informational only and do not constitute financial advice.
 
-MIT License
+Contributions welcome — new agents, tools, adapters, or integrations encouraged. Please see contribution guidelines for details.
